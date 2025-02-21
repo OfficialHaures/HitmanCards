@@ -1,0 +1,4 @@
+name: HitmanCards
+version: '1.0'
+main: nl.usefultime.hitmanCards.HitmanCards
+api-version: '1.19'

@@ -1,4 +1,8 @@
 name: HitmanCards
-version: '1.0'
+version: '${project.version}'
 main: nl.usefultime.hitmanCards.HitmanCards
 api-version: '1.19'
+commands:
+  hitman:
+    description: Main command for HitmanCards game
+    usage: /<command> [create|join|leave|start]

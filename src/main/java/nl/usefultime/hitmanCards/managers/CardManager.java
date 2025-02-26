@@ -18,7 +18,6 @@ public class CardManager {
     private void initializeDeck() {
         deck = new ArrayList<>();
 
-        // Add number cards
         for (CardColor color : new CardColor[]{CardColor.RED, CardColor.BLUE, CardColor.GREEN, CardColor.YELLOW}) {
             for (CardType type : CardType.values()) {
                 if (type.name().startsWith("NUMBER_")) {
@@ -27,7 +26,6 @@ public class CardManager {
             }
         }
 
-        // Add special cards
         for (int i = 0; i < 4; i++) {
             deck.add(new Card(CardType.WILD, CardColor.SPECIAL, "Wild"));
             deck.add(new Card(CardType.DRAW_FOUR, CardColor.SPECIAL, "Draw Four"));

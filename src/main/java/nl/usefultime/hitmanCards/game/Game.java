@@ -5,6 +5,9 @@ import nl.usefultime.hitmanCards.cards.Card;
 import nl.usefultime.hitmanCards.cards.CardColor;
 import nl.usefultime.hitmanCards.cards.CardType;
 import org.bukkit.*;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
@@ -26,6 +29,7 @@ public class Game {
     private static GameState state;
     private final List<Card> deck;
     private final List<Card> discardPile;
+    private BossBar turnBar;
 
     public Game(Player host) {
         this.gameId = UUID.randomUUID();
@@ -37,6 +41,7 @@ public class Game {
         this.reversed = false;
         this.deck = initializeDeck();
         this.discardPile = new ArrayList<>();
+        this.turnBar = Bukkit.createBossBar("", BarColor.BLUE, BarStyle.SOLID);
     }
 
     private List<Card> initializeDeck() {
@@ -76,6 +81,24 @@ public class Game {
             Player firstPlayer = players.get(currentPlayerIndex);
             broadcastMessage("§6Game started! First player: §f" + firstPlayer.getName());
             broadcastMessage("§6Top card: §f" + topCard.getDisplayName());
+            updateTurnBar();
+        }
+    }
+
+    private void updateTurnBar() {
+        Player currentPlayer = players.get(currentPlayerIndex);
+        turnBar.setTitle("§6Current Turn: §f" + currentPlayer.getName() + " §7- Required: " + topCard.getColor().name());
+
+        turnBar.setColor(switch (topCard.getColor()) {
+            case RED -> BarColor.RED;
+            case BLUE -> BarColor.BLUE;
+            case GREEN -> BarColor.GREEN;
+            case YELLOW -> BarColor.YELLOW;
+            case SPECIAL -> BarColor.PURPLE;
+        });
+
+        for (Player player : players) {
+            turnBar.addPlayer(player);
         }
     }
 
@@ -188,9 +211,6 @@ public class Game {
         player.getInventory().clear();
         List<Card> hand = playerHands.get(player.getUniqueId());
 
-        player.sendMessage("§6Current card: §f" + topCard.getDisplayName());
-        player.sendMessage("§6Required: §f" + topCard.getColor() + " or " + topCard.getType());
-
         for (int i = 0; i < hand.size(); i++) {
             Card card = hand.get(i);
             ItemStack cardItem = card.createItemStack();
@@ -237,6 +257,7 @@ public class Game {
                 player.getInventory().clear();
             }
         }
+        updateTurnBar();
     }
 
     public void handleCombat(Player damager, Player damaged) {
@@ -298,6 +319,8 @@ public class Game {
 
         winner.playSound(winner.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0f, 1.0f);
         winner.getWorld().spawnParticle(Particle.TOTEM, winner.getLocation(), 50);
+
+        turnBar.removeAll();
 
         for (Player player : players) {
             player.getInventory().clear();

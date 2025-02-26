@@ -1,57 +1,11 @@
-# HitmanCards Configuration
-
-# Game Settings
-game:
+settings:
   min-players: 2
-  max-players: 4
-  starting-cards: 5
-  max-score: 10
-  round-time: 300
+  max-players: 8
+  cards-per-player: 7
+  enable-special-cards: true
 
-# Card Settings
-cards:
-  elimination:
-    silent-takedown:
-      points: 3
-      cooldown: 60
-    accident-kill:
-      points: 4
-      cooldown: 90
-
-  stealth:
-    blend-in:
-      duration: 200
-      cooldown: 45
-    disguise:
-      duration: 160
-      cooldown: 30
-
-  distraction:
-    coin-toss:
-      radius: 5
-      cooldown: 15
-    fire-alarm:
-      radius: 10
-      cooldown: 30
-
-  counter:
-    instinct:
-      duration: 100
-      cooldown: 45
-    quick-escape:
-      distance: 5
-      cooldown: 60
-
-# Rewards
-rewards:
-  win: 100
-  elimination: 10
-  stealth-bonus: 5
-
-# Messages
 messages:
-  game-start: "&6The game has started!"
-  game-end: "&6Game Over! Winner: %winner%"
-  elimination: "&c%player% has been eliminated!"
-  join: "&a%player% has joined the game!"
-  leave: "&c%player% has left the game!"
+  game-start: "§aThe game has started!"
+  game-end: "§eGame over! Winner: %player%"
+  invalid-move: "§cYou can't play that card!"
+  not-your-turn: "§cIt's not your turn!"

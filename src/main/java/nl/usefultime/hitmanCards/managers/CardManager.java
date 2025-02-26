@@ -1,6 +1,7 @@
 package nl.usefultime.hitmanCards.managers;
 
 import nl.usefultime.hitmanCards.cards.Card;
+import nl.usefultime.hitmanCards.cards.CardColor;
 import nl.usefultime.hitmanCards.cards.CardType;
 
 import java.util.ArrayList;
@@ -8,33 +9,41 @@ import java.util.Collections;
 import java.util.List;
 
 public class CardManager {
-    private final List<Card> cardTemplates;
+    private List<Card> deck;
 
     public CardManager() {
-        this.cardTemplates = initializeCards();
+        initializeDeck();
     }
 
-    private List<Card> initializeCards() {
-        List<Card> cards = new ArrayList<>();
+    private void initializeDeck() {
+        deck = new ArrayList<>();
 
-        cards.add(new Card(CardType.ELIMINATION, "Silent Takedown", "Eliminate a target without alerting others"));
-        cards.add(new Card(CardType.ELIMINATION, "Accident Kill", "Make the elimination look like an accident"));
+        // Add number cards
+        for (CardColor color : new CardColor[]{CardColor.RED, CardColor.BLUE, CardColor.GREEN, CardColor.YELLOW}) {
+            for (CardType type : CardType.values()) {
+                if (type.name().startsWith("NUMBER_")) {
+                    deck.add(new Card(type, color, ""));
+                }
+            }
+        }
 
-        cards.add(new Card(CardType.STEALTH, "Blend In", "Become undetectable for one turn"));
-        cards.add(new Card(CardType.STEALTH, "Disguise", "Take on another player's appearance"));
+        // Add special cards
+        for (int i = 0; i < 4; i++) {
+            deck.add(new Card(CardType.WILD, CardColor.SPECIAL, "Wild"));
+            deck.add(new Card(CardType.DRAW_FOUR, CardColor.SPECIAL, "Draw Four"));
+        }
 
-        cards.add(new Card(CardType.DISTRACTION, "Coin Toss", "Distract guards in target area"));
-        cards.add(new Card(CardType.DISTRACTION, "Fire Alarm", "Cause chaos in the current area"));
-
-        cards.add(new Card(CardType.COUNTER, "Instinct", "Detect incoming elimination attempt"));
-        cards.add(new Card(CardType.COUNTER, "Quick Escape", "Avoid elimination and move to safe location"));
-
-        return cards;
+        shuffleDeck();
     }
 
-    public List<Card> createNewDeck() {
-        List<Card> deck = new ArrayList<>(cardTemplates);
+    public void shuffleDeck() {
         Collections.shuffle(deck);
-        return deck;
+    }
+
+    public Card drawCard() {
+        if (deck.isEmpty()) {
+            initializeDeck();
+        }
+        return deck.remove(0);
     }
 }

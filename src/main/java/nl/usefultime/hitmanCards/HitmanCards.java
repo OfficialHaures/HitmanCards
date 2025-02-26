@@ -15,8 +15,8 @@ public final class HitmanCards extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
-        this.gameManager = new GameManager(this);
         this.cardManager = new CardManager();
+        this.gameManager = new GameManager(cardManager);
 
         getCommand("hitman").setExecutor(new HitmanCommand(this));
 
